@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cd src && next build",
-    "dev": "cd src && next dev",
-    "start": "cd src && next start",
-    "lint": "cd src && next lint"
+    "dev": "next dev",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "next": "^15.5.4",
