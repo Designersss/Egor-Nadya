@@ -1,5 +1,3 @@
-@import "../../node_modules/tailwindcss/dist/lib.d.mts";
-
 @font-face {
   font-family: 'TildaSans';
   src: url('/fonts/TildaSans-VF.woff2') format('woff2'),
