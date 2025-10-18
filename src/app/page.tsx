@@ -1,103 +1,102 @@
 import Image from "next/image";
+import image1 from "../../public/1jpg.jpg"
+import image2 from "../../public/2.jpg"
+import image3 from "../../public/3.jpg"
+import image4 from "../../public/4.jpg"
+import image5 from "../../public/5.jpg"
+import Countdown from "@/reused/ui/Countdown";
+import QuestionnaireForm from "@/reused/components/QuestionnaireForm";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    return (
+        <div className="container-center">
+            <main className="mt-4 w-full">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+                <section>
+                    <h1 className="text-[35px] font-medium text-neutral-400">Приглашение</h1>
+                    <div className="flex items-center w-full justify-between mt-[80px] max-md:flex-col">
+                        <div className="flex flex-col gap-6 items-center text-2xl font-extralight">
+                            <span className="font-cursive text-[50px]">Н</span>
+                            <div className="w-[200px] bg-black h-[0.5px]"></div>
+                            <div className="flex flex-col gap-5 uppercase text-[20px] leading-3 items-center">
+                                <div>Надежда</div>
+                                <div>&</div>
+                                <div>Егор</div>
+                            </div>
+                            <div className="w-[200px] bg-black h-[0.5px]"></div>
+                            <span className="font-cursive text-[50px]">Е</span>
+                        </div>
+                        <Image src={image1} alt={""} width={300} height={700} />
+                    </div>
+                    <div className="flex flex-col w-full font-bold justify-end items-end mt-[50px] tracking-[4px]">
+                        <span className="leading-[20px]">24 апреля 2026</span>
+                        <span className="uppercase">Ждем вас</span>
+                    </div>
+                </section>
+
+                <Countdown />
+
+                <section className="mt-[50px]">
+                    <span className="flex w-fit text-[30px] items-center m-auto">Дорогой гость!</span>
+                    <div className="flex flex-col m-auto mt-6 text-center justify-center max-w-[500px]">
+                        <p>Мы рады сообщить Вам, что 24.04.2026 состоится самое главное торжество в нашей жизни - день нашей свадьбы!</p>
+                        <p>Приглашаем Вас разделить с нами радость этого незабываемого дня.</p>
+                        <p className="mt-8">24.04.2026 в 10:00</p>
+                    </div>
+                    <div className="mt-10">
+                        <Image className="m-auto" src={image2} alt={""} width={300} height={400} />
+                        <span className="flex mt-6 font-cursive text-[70px] font-light w-fit m-auto text-center leading-[60px] max-md:text-[30px] max-md:leading-8">Там, где посеяна любовь, растет радость</span>
+                    </div>
+                </section>
+
+                <section className="mt-[80px]">
+                    <div className="flex flex-col w-full items-center">
+                        <Image className="rounded-[150px]" src={image3} alt={""} width={300} height={400} />
+                        <div className="font-cursive text-[40px]">Жених</div>
+                    </div>
+                    <div className="flex flex-col w-full items-center mt-10">
+                        <Image className="rounded-[150px]" src={image4} alt={""} width={300} height={400} />
+                        <div className="font-cursive text-[40px]">Невеста</div>
+                    </div>
+
+                    <div className="flex flex-col gap-4 items-center mt-8">
+                        <h2 className="font-poiret font-bold uppercase text-2xl">Что же вас ждет?</h2>
+                        <span className="text-center">Роспись у нас уже была 24.04.2025, но день свадьбы мы решили отметить не менее значимым событием - венчанием. Свадьбу планируем отмечать в два дня.</span>
+                    </div>
+
+                    <div className="flex flex-col gap-4 items-center mt-8">
+                        <h2 className="font-poiret font-bold uppercase text-2xl">Где? Как?</h2>
+                        <span className="text-center">Торжество будет проходить во Владимире. Всю более точную информацию сообщим позже.</span>
+                    </div>
+
+                    <div className="flex flex-col gap-4 items-center mt-8">
+                        <h2 className="font-poiret font-bold uppercase text-2xl">Что же сейчас?</h2>
+                        <span className="text-center">Мы понимаем, что спланировать поезду на несколько дней не простая задача, которую можно решить за неделю. Поэтому мы приглашаем вас сейчас, чтобы у вас было время подумать.</span>
+                    </div>
+
+                    <div className="flex flex-col gap-2 items-center mt-8">
+                        <h2 className="font-poiret font-bold uppercase text-2xl text-center">До какого дать ответ?</h2>
+                        <span className="text-center">Просим дать ответ до 10.01.2026</span>
+                    </div>
+
+
+                    <span className="flex font-cursive justify-center text-center mt-4 text-[40px]">Ждем вас!</span>
+                    <div className="flex flex-col w-full items-center mt-4">
+                        <Image className="rounded-[150px]" src={image2} alt={""} width={200} height={400} />
+                    </div>
+                </section>
+
+                <section className="flex flex-col gap-4 mt-[80px]">
+                    <span className="flex justify-center">Примерная политра ниже, но более точная информация будет в январе</span>
+                    <Image className="m-auto" src={image5} alt={""} width={300} height={400} />
+                    <span className="flex justify-center text-center">Мы рады вижеть вас на нашем торжестве. Пожалуйста, примите к ссведению, что мероприятие только для взрослых.</span>
+                </section>
+
+
+                <QuestionnaireForm />
+
+
+            </main>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }
