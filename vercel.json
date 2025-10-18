@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "buildCommand": "npm run build",
+  "buildCommand": "cd src && next build",
   "outputDirectory": "src/.next",
-  "installCommand": "npm install"
+  "installCommand": "cd src && npm install"
 }
