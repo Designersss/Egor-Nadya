@@ -3,9 +3,9 @@
 import {useState, ChangeEvent, FormEvent, JSX, useEffect} from 'react';
 import { QuestionnaireFormData, QuestionnaireErrors, SubmitStatus } from '../types/questionnaire.type';
 import {sendToTelegram} from "@/api/send-to-tg";
-
 declare global {
     interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         grecaptcha: any;
     }
 }
