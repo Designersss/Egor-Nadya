@@ -4,6 +4,7 @@ import image2 from "../../public/2.jpg"
 import image3 from "../../public/3.jpg"
 import image4 from "../../public/4.jpg"
 import image5 from "../../public/5.jpg"
+import image6 from "../../public/6.jpg"
 import Countdown from "@/reused/ui/Countdown";
 import QuestionnaireForm from "@/reused/components/QuestionnaireForm";
 
@@ -41,10 +42,9 @@ export default function Home() {
                     <div className="flex flex-col m-auto mt-6 text-center justify-center max-w-[500px]">
                         <p>Мы рады сообщить Вам, что 24.04.2026 состоится самое главное торжество в нашей жизни - день нашей свадьбы!</p>
                         <p>Приглашаем Вас разделить с нами радость этого незабываемого дня.</p>
-                        <p className="mt-8">24.04.2026 в 10:00</p>
                     </div>
                     <div className="mt-10">
-                        <Image className="m-auto" src={image2} alt={""} width={300} height={400} />
+                        <Image className="m-auto" src={image6} alt={""} width={300} height={400} />
                         <span className="flex mt-6 font-cursive text-[70px] font-light w-fit m-auto text-center leading-[60px] max-md:text-[30px] max-md:leading-8">Там, где посеяна любовь, растет радость</span>
                     </div>
                 </section>

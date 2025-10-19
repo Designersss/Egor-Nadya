@@ -6,15 +6,47 @@ interface TelegramResponse {
     description?: string;
 }
 
+interface RecaptchaResponse {
+    success: boolean;
+    score?: number;
+    action?: string;
+}
+
 export async function sendToTelegram(formData: {
     fio: string;
     presence: string;
-    companion: string;
     secondDay: string;
     children: string;
     wishes: string;
+    recaptchaToken: string;
 }) {
-    const { fio, presence, companion, secondDay, children, wishes } = formData;
+    const { fio, presence, secondDay, children, wishes, recaptchaToken } = formData;
+
+    // Валидация reCAPTCHA
+    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+
+    if (!recaptchaSecret) {
+        return { success: false, error: 'Server configuration error' };
+    }
+
+    try {
+        // Проверка reCAPTCHA
+        const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `secret=${recaptchaSecret}&response=${recaptchaToken}`,
+        });
+
+        const recaptchaData: RecaptchaResponse = await recaptchaResponse.json();
+
+        if (!recaptchaData.success || (recaptchaData.score && recaptchaData.score < 0.5)) {
+            return { success: false, error: 'reCAPTCHA verification failed' };
+        }
+    } catch (error) {
+        return { success: false, error: 'reCAPTCHA verification error' };
+    }
 
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -29,7 +61,6 @@ export async function sendToTelegram(formData: {
 👤 *ФИО:* ${fio}
 
 ✅ *Присутствие:* ${getPresenceText(presence)}
-👥 *Сопровождение:* ${getCompanionText(companion)}
 📅 *Второй день:* ${getSecondDayText(secondDay)}
 👶 *Дети:* ${getChildrenText(children)}
 💭 *Пожелания:* ${wishes || 'Не указано'}
@@ -66,17 +97,7 @@ export async function sendToTelegram(formData: {
 function getPresenceText(value: string): string {
     const map: Record<string, string> = {
         'yes': 'Да, с большим удовольствием!',
-        'no': 'К сожалению, не смогу быть.',
-        'unsure': 'Пока не уверен(а), уточню позже'
-    };
-    return map[value] || value;
-}
-
-function getCompanionText(value: string): string {
-    const map: Record<string, string> = {
-        'alone': 'Я буду один/одна',
-        'couple': 'Мы будем вдвоем (я + мой партнер/спутник)',
-        'unsure-companion': 'Затрудняюсь ответить пока'
+        'no': 'К сожалению, не смогу быть.'
     };
     return map[value] || value;
 }
@@ -84,8 +105,6 @@ function getCompanionText(value: string): string {
 function getSecondDayText(value: string): string {
     const map: Record<string, string> = {
         'yes-definitely': 'Да, обязательно!',
-        'probably-yes': 'Скорее да, чем нет',
-        'unsure-mood': 'Еще не знаю, посмотрим по настроению',
         'no': 'Нет, к сожалению, не получится'
     };
     return map[value] || value;

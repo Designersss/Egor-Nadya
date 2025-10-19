@@ -1,14 +1,19 @@
 'use client';
 
-import {useState, ChangeEvent, FormEvent, JSX} from 'react';
+import {useState, ChangeEvent, FormEvent, JSX, useEffect} from 'react';
 import { QuestionnaireFormData, QuestionnaireErrors, SubmitStatus } from '../types/questionnaire.type';
 import {sendToTelegram} from "@/api/send-to-tg";
+
+declare global {
+    interface Window {
+        grecaptcha: any;
+    }
+}
 
 export default function QuestionnaireForm() {
     const [formData, setFormData] = useState<QuestionnaireFormData>({
         fio: '',
         presence: '',
-        companion: '',
         secondDay: '',
         children: '',
         wishes: ''
@@ -17,6 +22,27 @@ export default function QuestionnaireForm() {
     const [errors, setErrors] = useState<QuestionnaireErrors>({});
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('');
+    const [isRecaptchaLoaded, setIsRecaptchaLoaded] = useState<boolean>(false);
+
+    // Загрузка reCAPTCHA
+    useEffect(() => {
+        const loadRecaptcha = () => {
+            const script = document.createElement('script');
+            script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`;
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                setIsRecaptchaLoaded(true);
+            };
+            document.head.appendChild(script);
+        };
+
+        if (!window.grecaptcha) {
+            loadRecaptcha();
+        } else {
+            setIsRecaptchaLoaded(true);
+        }
+    }, []);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -38,12 +64,32 @@ export default function QuestionnaireForm() {
 
         if (!formData.fio.trim()) newErrors.fio = 'ФИО обязательно';
         if (!formData.presence) newErrors.presence = 'Ответьте на вопрос';
-        if (!formData.companion) newErrors.companion = 'Ответьте на вопрос';
         if (!formData.secondDay) newErrors.secondDay = 'Ответьте на вопрос';
         if (!formData.children) newErrors.children = 'Ответьте на вопрос';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const executeRecaptcha = async (): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            if (!window.grecaptcha) {
+                reject(new Error('reCAPTCHA not loaded'));
+                return;
+            }
+
+            window.grecaptcha.ready(async () => {
+                try {
+                    const token = await window.grecaptcha.execute(
+                        process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+                        { action: 'questionnaire_submit' }
+                    );
+                    resolve(token);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -54,18 +100,29 @@ export default function QuestionnaireForm() {
             return;
         }
 
+        if (!isRecaptchaLoaded) {
+            setSubmitStatus('error');
+            return;
+        }
+
         setIsSubmitting(true);
         setSubmitStatus('');
 
         try {
-            const result = await sendToTelegram(formData);
+            // Получаем токен reCAPTCHA
+            const recaptchaToken = await executeRecaptcha();
+
+            // Отправляем данные вместе с токеном
+            const result = await sendToTelegram({
+                ...formData,
+                recaptchaToken
+            });
 
             if (result.success) {
                 setSubmitStatus('success');
                 setFormData({
                     fio: '',
                     presence: '',
-                    companion: '',
                     secondDay: '',
                     children: '',
                     wishes: ''
@@ -84,18 +141,10 @@ export default function QuestionnaireForm() {
         const answers: Record<string, Record<string, string>> = {
             presence: {
                 'yes': 'Да, с большим удовольствием!',
-                'no': 'К сожалению, не смогу быть.',
-                'unsure': 'Пока не уверен(а), уточню позже'
-            },
-            companion: {
-                'alone': 'Я буду один/одна',
-                'couple': 'Мы будем вдвоем (я + мой партнер/спутник)',
-                'unsure-companion': 'Затрудняюсь ответить пока'
+                'no': 'К сожалению, не смогу быть.'
             },
             secondDay: {
                 'yes-definitely': 'Да, обязательно!',
-                'probably-yes': 'Скорее да, чем нет',
-                'unsure-mood': 'Еще не знаю, посмотрим по настроению',
                 'no': 'Нет, к сожалению, не получится'
             },
             children: {
@@ -159,21 +208,14 @@ export default function QuestionnaireForm() {
                 {renderRadioGroup(
                     'presence',
                     'Подтвердите, пожалуйста, свое присутствие',
-                    ['yes', 'no', 'unsure'],
+                    ['yes', 'no'],
                     errors.presence
-                )}
-
-                {renderRadioGroup(
-                    'companion',
-                    'С кем Вы планируете прийти?',
-                    ['alone', 'couple', 'unsure-companion'],
-                    errors.companion
                 )}
 
                 {renderRadioGroup(
                     'secondDay',
                     'Будете ли вы на втором дне?',
-                    ['yes-definitely', 'probably-yes', 'unsure-mood', 'no'],
+                    ['yes-definitely', 'no'],
                     errors.secondDay
                 )}
 
@@ -202,7 +244,7 @@ export default function QuestionnaireForm() {
                 <div className="space-y-2">
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isRecaptchaLoaded}
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? 'Отправка...' : 'Отправить ответы'}
@@ -210,7 +252,7 @@ export default function QuestionnaireForm() {
 
                     {submitStatus === 'error' && (
                         <p className="text-red-500 text-sm text-center">
-                            Ответьте на все обязательные вопросы
+                            {!isRecaptchaLoaded ? 'Загрузка защиты...' : 'Ответьте на все обязательные вопросы'}
                         </p>
                     )}
 
