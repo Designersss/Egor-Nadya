@@ -9,6 +9,7 @@ import Countdown from "@/reused/ui/Countdown";
 import QuestionnaireForm from "@/reused/components/QuestionnaireForm";
 
 export default function Home() {
+
     return (
         <div className="container-center">
             <main className="mt-4 w-full">
@@ -71,7 +72,7 @@ export default function Home() {
 
                     <div className="flex flex-col gap-4 items-center mt-8">
                         <h2 className="font-poiret font-bold uppercase text-2xl">Что же сейчас?</h2>
-                        <span className="text-center">Мы понимаем, что спланировать поезду на несколько дней не простая задача, которую можно решить за неделю. Поэтому мы приглашаем вас сейчас, чтобы у вас было время подумать.</span>
+                        <span className="text-center">Мы понимаем, что спланировать поездку на несколько дней - это не простая задача, которую можно решить за неделю. Поэтому мы приглашаем вас сейчас, чтобы у вас было время подумать.</span>
                     </div>
 
                     <div className="flex flex-col gap-2 items-center mt-8">
@@ -89,7 +90,7 @@ export default function Home() {
                 <section className="flex flex-col gap-4 mt-[80px]">
                     <span className="flex justify-center">Примерная политра ниже, но более точная информация будет в январе</span>
                     <Image className="m-auto" src={image5} alt={""} width={300} height={400} />
-                    <span className="flex justify-center text-center">Мы рады вижеть вас на нашем торжестве. Пожалуйста, примите к ссведению, что мероприятие только для взрослых.</span>
+                    <span className="flex justify-center text-center">Мы рады видеть вас на нашем торжестве. Пожалуйста, примите к сведению, что мероприятие только для взрослых.</span>
                 </section>
 
 
